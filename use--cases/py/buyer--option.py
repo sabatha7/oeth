@@ -10,10 +10,6 @@ EthSepolia = os.environ.get('Web3HTTPProvider')
 from_account = os.environ.get('Web3from_account')
 private_key = os.environ.get('Web3private_key')
 
-# Printing to verify
-print("EthSepolia:", EthSepolia)
-print("from_account:", from_account)
-print("private_key:", private_key)
 
 ### Connect to Ganache
 ##web3 = Web3(Web3.HTTPProvider(EthSepolia))

@@ -5,8 +5,7 @@ interface OptionBuyerInterface:
     def getBuyer() -> address: view
 
 # Define your OptionProcurer
-#balanceAmount: uint256
-option: OptionBuyerInterface
+balanceAmount: uint256
 owner: address
 procurer: address
 lastKnownLiquidated: uint256
@@ -15,9 +14,8 @@ timestamps: public(HashMap[uint256, address])
 # Constructor
 @payable
 @deploy
-def __init__(_merchant: address, _option: address, _timestamp: uint256):
-    #self.balanceAmount = msg.value
-    self.option = OptionBuyerInterface(_option)
+def __init__(_merchant: address, _timestamp: uint256):
+    self.balanceAmount = msg.value
     self.owner = _merchant
     self.procurer = msg.sender
     self.lastKnownLiquidated = _timestamp
@@ -26,15 +24,8 @@ def __init__(_merchant: address, _option: address, _timestamp: uint256):
 @external
 def withdraw():
     assert msg.sender == self.owner or msg.sender == self.procurer, "Only owner can withdraw"
-    if msg.sender == self.procurer:
-        assert self.timestamps[self.lastKnownLiquidated] != self.procurer, "Only owner can withdraw"
-    send(self.owner, self.balance)
-
-# Get Procurer function
-@external
-@view
-def getProcurer() -> address:
-    return self.procurer
+    if msg.sender == self.procurer:assert self.timestamps[self.lastKnownLiquidated] != self.procurer, "Only owner can withdraw"
+    send(self.procurer, self.balanceAmount)
 
 # Set Owner function
 @external
@@ -47,8 +38,8 @@ def setOwner(_owner: address, _timestamp: uint256):
 
 # Claim Receivables function
 @external
-def claimReceivables(_merchant: address):
+def claimReceivables(_merchant: address, _buyer: address):
     assert msg.sender == self.procurer, "Only owner can withdraw"
-    assert self.option.getBuyer() == self.procurer, "Only owner can withdraw"
+    assert _buyer == self.procurer, "Only owner can withdraw"
     self.owner = _merchant
     self.procurer = _merchant

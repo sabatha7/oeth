@@ -17,7 +17,5 @@ contract OptionBuyer {
         payable(_recipient).transfer(address(this).balance);
     }
 	
-	function getBuyer() external view returns (address) {
-		return buyer;
-    }
+	function getBuyer() external view returns (address) {return buyer;}
 }

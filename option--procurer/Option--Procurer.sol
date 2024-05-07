@@ -1,31 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface Option {
-    function getBuyer() external view returns (address);
-}
-
 contract OptionProcurer {
     uint256 public balance;
-	Option public option;
 	address public owner;
     address public procurer;
 	uint256 public lastKnownLiquidated;
 	mapping(uint256 => address) public timestamps;
 
-    constructor(address _merchant, address _option, uint256 _timestamp) payable {
-		balance = msg.value;
-        option = Option(_option);
-        owner = _merchant;
-        procurer = msg.sender;
-		lastKnownLiquidated = _timestamp;
-		timestamps[lastKnownLiquidated] = procurer;
+    constructor(address _merchant, uint256 _timestamp) payable {
+      balance = msg.value;
+      owner = _merchant;
+      procurer = msg.sender;
+      lastKnownLiquidated = _timestamp;
+      timestamps[lastKnownLiquidated] = procurer;
     }
     
     function withdraw() external {
         require(msg.sender == owner || msg.sender == procurer, "Only owner can withdraw");
 		if (msg.sender == procurer){require(timestamps[lastKnownLiquidated] != procurer, "Only owner can withdraw");}
-        payable(owner).transfer(address(this).balance);
+        payable(procurer).transfer(address(this).balance);
     }
 	
 	function getProcurer() external view returns (address) {
@@ -40,9 +34,9 @@ contract OptionProcurer {
 		procurer = _owner;
 	}
 	
-	function claimReceivables(address _merchant) external {
+	function claimReceivables(address _merchant, address _buyer) external {
 		require(msg.sender == procurer, "Only owner can withdraw");
-		require(option.getBuyer() == procurer, "Only owner can withdraw");
+		require(_buyer == procurer, "Only owner can withdraw");
 		owner = _merchant;
 		procurer = _merchant;
 	}
