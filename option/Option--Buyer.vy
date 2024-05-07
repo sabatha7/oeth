@@ -1,11 +1,12 @@
 # Option--Buyer.vy
-balance: uint256
+#balanceAmount: uint256
 buyer: address
 owner: address
 
+@deploy
 @payable
 def __init__(_merchant: address):
-    self.balance = msg.value
+    #self.balanceAmount = msg.value
     self.buyer = msg.sender
     self.owner = _merchant
 

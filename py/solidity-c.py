@@ -1,7 +1,7 @@
 import subprocess
 
 # Path to your Solidity contract file
-solidity_contract_file = "../option procurer/OptionProcurer.sol"
+solidity_contract_file = "../option--procurer/Option--Procurer.sol"
 
 compiled_contract_byte_file = "solidity_contract_byte.txt"
 compiled_contract_abi_file = "solidity_contract_abi.json"

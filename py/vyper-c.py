@@ -2,7 +2,7 @@ import subprocess
 import os
 
 # Path to your Vyper contract file
-vyper_contract_file = "..\\option procurer\\OptionProcurer.vy"
+vyper_contract_file = "..\\option--procurer\\Option--Procurer.vy"
 
 compiled_contract_byte_file = "vyper_contract_byte.txt"
 compiled_contract_abi_file = "vyper_contract_abi.json"

@@ -1,21 +1,35 @@
 # Option--Merchant.vy
+
+# Define OptionBuyerInterface within the same script
+interface OptionBuyerInterface:
+    def withdraw(_recipient: address) -> bool: view
+
+# Define OptionProcurerInterface within the same script
+interface OptionProcurerInterface:
+    def setOwner(_owner: address) : view
+
+# State variables
 buyerContractBuyer: address
-initTime: int128
+initTime: uint256
 lastKnownSwapped: uint256
 owner: address
 procurerContractProcurer: address
 
-@external
-def __init__(_procurer: address, _buyer: address, _timestamp: int128):
+# Constructor
+@deploy
+@payable
+def __init__(_procurer: address, _buyer: address, _timestamp: uint256):
     self.buyerContractBuyer = _buyer
     self.owner = msg.sender
     self.procurerContractProcurer = _procurer
-    self.initTime = self.lastKnownSwapped = _timestamp
+    self.lastKnownSwapped = _timestamp
+    self.initTime = self.lastKnownSwapped
 
+# Atomic Swap function
 @external
-def atomicSwap(_timestamp: int128):
+def atomicSwap(_timestamp: uint256):
     assert msg.sender == self.owner, "Only owner can work"
     assert self.lastKnownSwapped == self.initTime, "Only works once"
     self.lastKnownSwapped = _timestamp
-    if self.buyerContract.withdraw(self.procurerContractProcurer):
-        self.procurerContract.setOwner(self.buyerContractBuyer)
+    if OptionBuyerInterface(self.buyerContractBuyer).withdraw(self.procurerContractProcurer):
+        OptionProcurerInterface(self.procurerContractProcurer).setOwner(self.buyerContractBuyer)
