@@ -1,4 +1,4 @@
-// Option--Buyer.sol
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 contract OptionBuyer {
@@ -12,7 +12,7 @@ contract OptionBuyer {
 		owner = _merchant;
     }
     
-    function withdraw(adress _recipient) external {
+    function withdraw(address _recipient) external {
         require(msg.sender == owner, "Only owner can withdraw");
         payable(_recipient).transfer(address(this).balance);
     }

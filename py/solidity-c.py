@@ -1,4 +1,5 @@
-import subprocess
+import solcx
+import json
 
 # Path to your Solidity contract file
 solidity_contract_file = "../option--procurer/Option--Procurer.sol"
@@ -8,23 +9,26 @@ compiled_contract_abi_file = "solidity_contract_abi.json"
 
 # Compile the Solidity contract
 try:
-    # Run the solc compiler as a subprocess
-    result = subprocess.run(['solc', '--bin', '--abi', '--optimize', '--overwrite', '-o', './', solidity_contract_file], capture_output=True, text=True, check=True)
+    # Set Solidity compiler version
+    solcx.install_solc("0.8.0")
+    
+    # Compile the contract
+    compiled_contract = solcx.compile_files([solidity_contract_file], output_values=["bin-runtime", "abi"], optimize=True)
     
     print("Contract compiled successfully!")
     
-    # Extract compiled bytecode
-    compiled_bytecode = None
-    with open(compiled_contract_byte_file, 'r') as f:
-        compiled_bytecode = f.read()
-    
-    # Extract compiled ABI
-    compiled_abi = None
-    with open(compiled_contract_abi_file, 'r') as f:
-        compiled_abi = f.read()
+    # Extract compiled bytecode and ABI
+    compiled_bytecode = compiled_contract[solidity_contract_file + ':OptionProcurer']['bin-runtime']
+    compiled_abi = compiled_contract[solidity_contract_file + ':OptionProcurer']['abi']
     
     # Print compiled bytecode and ABI
     print("Compiled Bytecode:", compiled_bytecode)
     print("Compiled ABI:", compiled_abi)
-except subprocess.CalledProcessError as e:
+    
+    # Save compiled bytecode and ABI to files
+    with open(compiled_contract_byte_file, 'w') as f:
+        f.write(compiled_bytecode)
+    with open(compiled_contract_abi_file, 'w') as f:
+        json.dump(compiled_abi, f)
+except solcx.exceptions.SolcError as e:
     print("Contract compilation failed:", e)

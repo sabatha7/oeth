@@ -23,7 +23,7 @@ def __init__(_procurer: address, _buyer: address, _timestamp: uint256):
     self.owner = msg.sender
     self.procurerContractProcurer = _procurer
     self.lastKnownSwapped = _timestamp
-    self.initTime = self.lastKnownSwapped
+    self.initTime = _timestamp
 
 # Atomic Swap function
 @external

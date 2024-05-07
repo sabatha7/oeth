@@ -1,9 +1,13 @@
-// Option--Procurer.sol
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+
+interface Option {
+    function getBuyer() external view returns (address);
+}
 
 contract OptionProcurer {
     uint256 public balance;
-	address public option;
+	Option public option;
 	address public owner;
     address public procurer;
 	uint256 public lastKnownLiquidated;
@@ -11,7 +15,7 @@ contract OptionProcurer {
 
     constructor(address _merchant, address _option, uint256 _timestamp) payable {
 		balance = msg.value;
-        option = _option;
+        option = Option(_option);
         owner = _merchant;
         procurer = msg.sender;
 		lastKnownLiquidated = _timestamp;
