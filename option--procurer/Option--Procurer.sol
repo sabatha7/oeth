@@ -2,14 +2,12 @@
 pragma solidity ^0.8.0;
 
 contract OptionProcurer {
-    uint256 public balance;
 	address public owner;
     address public procurer;
 	uint256 public lastKnownLiquidated;
 	mapping(uint256 => address) public timestamps;
 
     constructor(address _merchant, uint256 _timestamp) payable {
-      balance = msg.value;
       owner = _merchant;
       procurer = msg.sender;
       lastKnownLiquidated = _timestamp;
@@ -29,7 +27,7 @@ contract OptionProcurer {
 	function setOwner(address _owner, uint256 _timestamp) external {
 		require(msg.sender == owner, "Only owner can withdraw");
 		lastKnownLiquidated = _timestamp;
-		timestamps[lastKnownLiquidated] = procurer;
+		timestamps[_timestamp] = procurer;
 		owner = _owner;
 		procurer = _owner;
 	}

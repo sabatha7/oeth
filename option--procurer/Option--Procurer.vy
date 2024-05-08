@@ -1,10 +1,4 @@
 # Option--Procurer.vy
-
-# Define OptionBuyerInterface within the same script
-interface OptionBuyerInterface:
-    def getBuyer() -> address: view
-
-# Define your OptionProcurer
 balanceAmount: uint256
 owner: address
 procurer: address
@@ -15,7 +9,6 @@ timestamps: public(HashMap[uint256, address])
 @payable
 @deploy
 def __init__(_merchant: address, _timestamp: uint256):
-    self.balanceAmount = msg.value
     self.owner = _merchant
     self.procurer = msg.sender
     self.lastKnownLiquidated = _timestamp
@@ -25,7 +18,7 @@ def __init__(_merchant: address, _timestamp: uint256):
 def withdraw():
     assert msg.sender == self.owner or msg.sender == self.procurer, "Only owner can withdraw"
     if msg.sender == self.procurer:assert self.timestamps[self.lastKnownLiquidated] != self.procurer, "Only owner can withdraw"
-    send(self.procurer, self.balanceAmount)
+    send(self.procurer, self.balance)
 
 # Set Owner function
 @external

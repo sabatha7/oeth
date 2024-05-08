@@ -2,12 +2,10 @@
 pragma solidity ^0.8.0;
 
 contract OptionBuyer {
-	uint256 public balance;
 	address public buyer;
 	address public owner;
 
     constructor(address _merchant) payable {
-		balance = msg.value;
         buyer = msg.sender;
 		owner = _merchant;
     }

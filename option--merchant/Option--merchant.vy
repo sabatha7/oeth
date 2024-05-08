@@ -4,7 +4,6 @@
 buyerContractBuyer: address
 initTime: uint256
 lastKnownSwapped: uint256
-owner: address
 procurerContractProcurer: address
 
 # Constructor
@@ -12,7 +11,6 @@ procurerContractProcurer: address
 @payable
 def __init__(_procurer: address, _buyer: address, _timestamp: uint256):
     self.buyerContractBuyer = _buyer
-    self.owner = msg.sender
     self.procurerContractProcurer = _procurer
     self.lastKnownSwapped = _timestamp
     self.initTime = _timestamp
