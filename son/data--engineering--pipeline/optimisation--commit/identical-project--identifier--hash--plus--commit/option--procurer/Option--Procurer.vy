@@ -1,5 +1,3 @@
-# Option--Procurer.vy
-balanceAmount: uint256
 owner: address
 procurer: address
 lastKnownLiquidated: uint256
