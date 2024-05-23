@@ -34,8 +34,8 @@ contract OptionProcurer {
 	}
 	
 	function claimReceivables(address _merchant, address _buyer) external {
-		require(msg.sender == procurer, "Only owner can withdraw");
-		require(_buyer == procurer, "Only owner can withdraw");
+		require(msg.sender == owner || msg.sender == procurer, "Only owner can withdraw");
+		require(_buyer == procurer || _buyer == owner, "Only owner can withdraw");
 		owner = _merchant;
 		procurer = _merchant;
 	}

@@ -15,11 +15,11 @@ abstract contract SparseMerkleTree {
         bytes32 currentHash = leaf;
         uint256 idx = index;
 
-        for (uint8 i = 0; i < proof.length; i++) {
+        for (uint256 i = 0; i < proof.length; i++) {
             if (idx % 2 == 0) {
-                currentHash = keccak256(abi.encodePacked(currentHash, proof[i]));
+                currentHash = keccak256(abi.encodePacked(currentHash, proof));
             } else {
-                currentHash = keccak256(abi.encodePacked(proof[i], currentHash));
+                currentHash = keccak256(abi.encodePacked(proof, currentHash));
             }
             idx /= 2;
         }
