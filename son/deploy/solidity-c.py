@@ -2,9 +2,9 @@ import subprocess
 import json
 
 # Path to your Solidity contract file
-solidity_contract_file = "contracts/RewardManager.sol"
-compiled_contract_byte_file = "reward_manager_contract_byte.txt"
-compiled_contract_abi_file = "reward_manager_contract_abi.json"
+solidity_contract_file = "contracts/OptionBuyer.sol"
+compiled_contract_byte_file = "OptionBuyer_contract_byte.txt"
+compiled_contract_abi_file = "OptionBuyer_contract_abi.json"
 
 # Compile the Solidity contract
 try:

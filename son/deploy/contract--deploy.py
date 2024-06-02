@@ -25,12 +25,20 @@ private_key = os.environ.get('Web3private_key')
 # Get the nonce
 nonce = web3.eth.get_transaction_count(from_account)
 
+### Load compiled bytecode
+##with open('reward_manager_contract_byte.txt') as f:
+##    contract_bytecode = f.read().strip()
+##
+### Load contract ABI
+##with open('reward_manager_contract_abi.json') as f:
+##    contract_abi = json.load(f)
+
 # Load compiled bytecode
-with open('reward_manager_contract_byte.txt') as f:
+with open('OptionBuyer_contract_byte.txt') as f:
     contract_bytecode = f.read().strip()
 
 # Load contract ABI
-with open('reward_manager_contract_abi.json') as f:
+with open('OptionBuyer_contract_abi.json') as f:
     contract_abi = json.load(f)
 
 # Merchant address
@@ -58,11 +66,11 @@ root_bytes = Web3.to_bytes(hexstr=root.hex())
 SN = web3.eth.contract(abi=contract_abi, bytecode=contract_bytecode)
 
 # Specify the value to be sent (in Wei)
-value_in_wei = web3.to_wei(1, 'ether')
+value_in_wei = web3.to_wei(.1, 'ether')
 
 # Build the transaction
 try:
-    tx = SN.constructor(root_bytes).build_transaction(
+    tx = SN.constructor(_merchant).build_transaction(
         {
             'gasPrice': web3.eth.gas_price,
             'chainId': 80002,  # Replace with the actual chain ID if different 80002 amoy pos and 11155111 sepolia eth
@@ -71,20 +79,20 @@ try:
             'value': value_in_wei  # Include the value to be sent
         }
     )
-    print(tx)
+    ##print(tx)
 
     # Sign the transaction
-    # signed_tx = web3.eth.account.sign_transaction(tx, private_key=private_key)
+    signed_tx = web3.eth.account.sign_transaction(tx, private_key=private_key)
     
     # Send the transaction
-    # tx_hash = web3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    tx_hash = web3.eth.send_raw_transaction(signed_tx.rawTransaction)
     
     # Wait for the transaction receipt
-    # tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+    tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
     
     # Get the contract address
-    # contract_address = tx_receipt.contractAddress
-    # print(f"Contract deployed at address: {contract_address}")
+    contract_address = tx_receipt.contractAddress
+    print(f"Contract deployed at address: {contract_address}")
 
     # Interact with the deployed contract (optional)
     # reward_manager = web3.eth.contract(address=contract_address, abi=contract_abi)
